@@ -3,32 +3,36 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NoImg from '../../img/no-image.png';
 
-const Cast = () => {
-  const [credits, setCredits] = useState(null);
+const Cast = ({ setIsLoading }) => {
+  const [credits, setCredits] = useState([]);
   const { movieId } = useParams();
 
   useEffect(() => {
     const fetchMovieCredits = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(
           `https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`,
           OPTIONS
         );
         if (res.ok) {
-          return res.json();
+          const data = await res.json();
+          return data;
         }
         throw new Error('Opps!');
       } catch (error) {
-        console.log(error.message);
+        console.log(`Oops! ${error.message} 😒`);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchMovieCredits().then(res => setCredits(res.cast));
-  }, [movieId]);
+  }, [movieId, setIsLoading]);
 
   return (
     <ul style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-      {credits ? (
+      {credits?.length > 0 ? (
         credits.map(({ id, name, character, profile_path }) => (
           <li key={id}>
             <img
@@ -47,7 +51,7 @@ const Cast = () => {
           </li>
         ))
       ) : (
-        <p>We don't have any reviews for this movie, sorry 😒</p>
+        <p>We don't have any casts for this movie 😒</p>
       )}
     </ul>
   );

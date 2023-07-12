@@ -5,18 +5,31 @@ import MovieDetails from 'pages/MovieDetails';
 import Reviews from './Reviews/Reviews';
 import Cast from './Cast/Cast';
 import Layout from './Layout/Layout';
+import { useState } from 'react';
 
 export const App = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  console.log(isLoading);
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="movies" element={<Movies />} />
-          {/* <Route path="/movies?query=..." /> */}
-          <Route path="movies/:movieId" element={<MovieDetails />}>
-            <Route path="cast" element={<Cast />} />
-            <Route path="reviews" element={<Reviews />} />
+        <Route path="/" element={<Layout isLoading={isLoading} />}>
+          <Route index element={<Home setIsLoading={setIsLoading} />} />
+          <Route
+            path="movies"
+            element={<Movies setIsLoading={setIsLoading} />}
+          />
+
+          <Route
+            path="movies/:movieId"
+            element={<MovieDetails setIsLoading={setIsLoading} />}
+          >
+            <Route path="cast" element={<Cast setIsLoading={setIsLoading} />} />
+            <Route
+              path="reviews"
+              element={<Reviews setIsLoading={setIsLoading} />}
+            />
           </Route>
         </Route>
         <Route path="*" element={<Home />} />
