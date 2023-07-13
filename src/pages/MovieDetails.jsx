@@ -1,13 +1,17 @@
 import { OPTIONS } from 'api/api';
-import { useEffect, useState } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 
 import NoImg from '../img/no-image.png';
 import { toast } from 'react-toastify';
+import { StyledLinkMovie } from 'components/Styled';
 
 const MovieDetails = ({ setIsLoading }) => {
   const [movie, setMovie] = useState(null);
   const { movieId } = useParams();
+
+  const location = useLocation();
+  const backLinkLocationRef = useRef(location.state?.from ?? '/movies');
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -34,7 +38,9 @@ const MovieDetails = ({ setIsLoading }) => {
 
   return (
     <>
-      <a href="/">Go back</a>
+      <StyledLinkMovie to={backLinkLocationRef.current}>
+        Back to previous page
+      </StyledLinkMovie>
       {movie && (
         <>
           <div style={{ display: 'flex', gap: 20 }}>
@@ -69,10 +75,12 @@ const MovieDetails = ({ setIsLoading }) => {
       )}
 
       <nav>
-        <Link to="cast">Cast</Link>
-        <Link to="reviews">Reviews</Link>
+        <StyledLinkMovie to="cast">Cast</StyledLinkMovie>
+        <StyledLinkMovie to="reviews">Reviews</StyledLinkMovie>
       </nav>
-      <Outlet />
+      <Suspense>
+        <Outlet />
+      </Suspense>
     </>
   );
 };

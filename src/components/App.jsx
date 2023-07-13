@@ -1,38 +1,44 @@
 import { Route, Routes } from 'react-router-dom';
-import Home from '../pages/Home';
-import Movies from '../pages/Movies';
-import MovieDetails from 'pages/MovieDetails';
-import Reviews from './Reviews/Reviews';
-import Cast from './Cast/Cast';
+import { Suspense, lazy, useState } from 'react';
+
 import Layout from './Layout/Layout';
-import { useState } from 'react';
+const Home = lazy(() => import('../pages/Home'));
+const Movies = lazy(() => import('../pages/Movies'));
+const MovieDetails = lazy(() => import('pages/MovieDetails'));
+const Reviews = lazy(() => import('./Reviews/Reviews'));
+const Cast = lazy(() => import('./Cast/Cast'));
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div>
-      <Routes>
-        <Route path="/" element={<Layout isLoading={isLoading} />}>
-          <Route index element={<Home setIsLoading={setIsLoading} />} />
-          <Route
-            path="movies"
-            element={<Movies setIsLoading={setIsLoading} />}
-          />
-
-          <Route
-            path="movies/:movieId"
-            element={<MovieDetails setIsLoading={setIsLoading} />}
-          >
-            <Route path="cast" element={<Cast setIsLoading={setIsLoading} />} />
+      <Suspense>
+        <Routes>
+          <Route path="/" element={<Layout isLoading={isLoading} />}>
+            <Route index element={<Home setIsLoading={setIsLoading} />} />
             <Route
-              path="reviews"
-              element={<Reviews setIsLoading={setIsLoading} />}
+              path="movies"
+              element={<Movies setIsLoading={setIsLoading} />}
             />
+
+            <Route
+              path="movies/:movieId"
+              element={<MovieDetails setIsLoading={setIsLoading} />}
+            >
+              <Route
+                path="cast"
+                element={<Cast setIsLoading={setIsLoading} />}
+              />
+              <Route
+                path="reviews"
+                element={<Reviews setIsLoading={setIsLoading} />}
+              />
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<Home />} />
-      </Routes>
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import Header from 'components/Header/Header';
+import { MainContainer } from 'components/Styled';
 import { MutatingDots } from 'react-loader-spinner';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,6 +8,14 @@ import 'react-toastify/dist/ReactToastify.css';
 const Layout = ({ isLoading }) => {
   return (
     <>
+      <header>
+        <Header />
+      </header>
+      <main>
+        <MainContainer>
+          <Outlet />
+        </MainContainer>
+      </main>
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -23,8 +32,8 @@ const Layout = ({ isLoading }) => {
         <MutatingDots
           height="100"
           width="100"
-          color="#ff8c00"
-          secondaryColor="#393a39"
+          color="#087795"
+          secondaryColor="#c0c0c0"
           radius="12.5"
           ariaLabel="mutating-dots-loading"
           wrapperStyle={{
@@ -43,8 +52,6 @@ const Layout = ({ isLoading }) => {
           visible={true}
         />
       )}
-      <Header />
-      <Outlet />
     </>
   );
 };

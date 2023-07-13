@@ -1,15 +1,23 @@
 import { OPTIONS } from 'api/api';
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import NoImg from '../img/no-image.png';
 import { toast } from 'react-toastify';
+import {
+  SearchBtn,
+  StyledInput,
+  StyledLinkHome,
+  StyledLinkMovie,
+} from 'components/Styled';
 
 const Movies = ({ setIsLoading }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchResults, setSearchResults] = useState([]);
 
   const searchQuery = searchParams.get('search') ?? '';
+
+  const location = useLocation();
 
   useEffect(() => {
     if (!searchQuery) return;
@@ -49,28 +57,38 @@ const Movies = ({ setIsLoading }) => {
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.currentTarget;
-    e.target.elements[0].value !== ''
-      ? setSearchParams({ search: e.target.elements[0].value })
-      : setSearchParams({});
+    if (e.target.elements[0].value.trim() !== '') {
+      setSearchParams({ search: e.target.elements[0].value });
+    } else {
+      setSearchParams({});
+      setSearchResults([]);
+      toast.info('You should enter search query first!');
+    }
+
     form.reset();
   };
   return (
     <div>
+      <StyledLinkMovie to="/">Back to previous page</StyledLinkMovie>
       <form onSubmit={handleSubmit}>
-        <input
+        <StyledInput
           type="text"
           placeholder="Enter movie to search..."
           autoFocus
           name="search"
         />
-        <button type="submit">Search</button>
+        <SearchBtn type="submit">Search</SearchBtn>
       </form>
 
       {searchResults?.length > 0 && (
         <ul style={{ display: 'flex', flexWrap: 'wrap', gap: 15 }}>
           {searchResults.map(
             ({ id, release_date, title, name, backdrop_path, poster_path }) => (
-              <Link key={id} to={`/movies/${id}`}>
+              <StyledLinkHome
+                key={id}
+                to={`/movies/${id}`}
+                state={{ from: location }}
+              >
                 <img
                   loading="lazy"
                   src={
@@ -85,7 +103,7 @@ const Movies = ({ setIsLoading }) => {
                 />
                 <h4 style={{ maxWidth: 200 }}>{title || name}</h4>
                 {String(release_date).substring(0, 4)}
-              </Link>
+              </StyledLinkHome>
             )
           )}
         </ul>

@@ -1,10 +1,13 @@
 import { OPTIONS } from 'api/api';
+import { StyledLinkHome } from 'components/Styled';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Home = ({ setIsLoading }) => {
   const [movies, setMovies] = useState([]);
+
+  const location = useLocation();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -26,16 +29,19 @@ const Home = ({ setIsLoading }) => {
         setIsLoading(false);
       }
     };
-
     fetchMovies();
   }, [setIsLoading]);
 
   return (
     <ul>
       {movies.map(({ title, id }) => (
-        <Link key={id} to={`/movies/${id}`}>
+        <StyledLinkHome
+          key={id}
+          to={`/movies/${id}`}
+          state={{ from: location }}
+        >
           <li>{title}</li>
-        </Link>
+        </StyledLinkHome>
       ))}
     </ul>
   );

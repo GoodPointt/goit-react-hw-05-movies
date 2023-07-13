@@ -1,11 +1,11 @@
-const { NavLink } = require('react-router-dom');
+import { NavBar, NavButton } from 'components/Styled';
 
 const Header = () => {
   return (
-    <nav>
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="/movies">Movies</NavLink>
-    </nav>
+    <NavBar>
+      <NavButton to="/">Home</NavButton>
+      <NavButton to="/movies">Movies</NavButton>
+    </NavBar>
   );
 };
 
