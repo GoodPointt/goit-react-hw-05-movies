@@ -38,7 +38,7 @@ export const NavButton = styled(NavLink)`
   }
 `;
 
-export const SearchBtn = styled(Link)`
+export const SearchBtn = styled.button`
   text-decoration: none;
 
   font-size: 1rem;
