@@ -7,8 +7,9 @@ import { toast } from 'react-toastify';
 
 const Movies = ({ setIsLoading }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+
+  const searchQuery = searchParams.get('search') ?? '';
 
   useEffect(() => {
     if (!searchQuery) return;
@@ -27,7 +28,9 @@ const Movies = ({ setIsLoading }) => {
         }
         throw new Error('Opps!');
       } catch (error) {
-        toast.error(`Oops! something go wrong, please try again later 😒`);
+        toast.error(
+          `${error.message} Something go wrong, please try again later 😒`
+        );
       } finally {
         setIsLoading(false);
       }
@@ -35,8 +38,7 @@ const Movies = ({ setIsLoading }) => {
 
     fetchSearchMovies().then(res => {
       if (res?.results.length === 0) {
-        setSearchQuery('');
-        setSearchParams('');
+        setSearchParams({});
         setSearchResults([]);
         return toast.warn(`Nothing found matching "${searchQuery}"`);
       }
@@ -46,7 +48,11 @@ const Movies = ({ setIsLoading }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    setSearchQuery(searchParams.get('search'));
+    const form = e.currentTarget;
+    e.target.elements[0].value !== ''
+      ? setSearchParams({ search: e.target.elements[0].value })
+      : setSearchParams({});
+    form.reset();
   };
   return (
     <div>
@@ -56,9 +62,6 @@ const Movies = ({ setIsLoading }) => {
           placeholder="Enter movie to search..."
           autoFocus
           name="search"
-          onChange={e => {
-            setSearchParams({ search: e.target.value });
-          }}
         />
         <button type="submit">Search</button>
       </form>

@@ -10,7 +10,6 @@ import { useState } from 'react';
 export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(isLoading);
   return (
     <div>
       <Routes>
