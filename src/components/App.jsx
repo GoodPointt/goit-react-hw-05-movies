@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy, useState } from 'react';
 
 import Layout from './Layout/Layout';
+import NotFound from 'pages/NotFound';
 const Home = lazy(() => import('../pages/Home'));
 const Movies = lazy(() => import('../pages/Movies'));
 const MovieDetails = lazy(() => import('pages/MovieDetails'));
@@ -36,7 +37,7 @@ export const App = () => {
               />
             </Route>
           </Route>
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </div>
