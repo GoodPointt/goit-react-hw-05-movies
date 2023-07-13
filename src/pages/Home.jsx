@@ -34,13 +34,13 @@ const Home = ({ setIsLoading }) => {
 
   return (
     <ul>
-      {movies.map(({ title, id }) => (
+      {movies.map(({ title, id, name }) => (
         <StyledLinkHome
           key={id}
           to={`/movies/${id}`}
           state={{ from: location }}
         >
-          <li>{title}</li>
+          <li>{title || name}</li>
         </StyledLinkHome>
       ))}
     </ul>
