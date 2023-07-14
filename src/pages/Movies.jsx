@@ -9,6 +9,9 @@ import {
   StyledInput,
   StyledLinkHome,
   StyledLinkMovie,
+  StyledList,
+  StyledListItem,
+  StyledListItemImg,
 } from 'components/Styled';
 
 const Movies = ({ setIsLoading }) => {
@@ -81,32 +84,34 @@ const Movies = ({ setIsLoading }) => {
       </form>
 
       {searchResults?.length > 0 && (
-        <ul style={{ display: 'flex', flexWrap: 'wrap', gap: 15 }}>
+        <StyledList>
           {searchResults.map(
             ({ id, release_date, title, name, backdrop_path, poster_path }) => (
-              <StyledLinkHome
-                key={id}
-                to={`/movies/${id}`}
-                state={{ from: location }}
-              >
-                <img
-                  loading="lazy"
-                  src={
-                    poster_path || backdrop_path
-                      ? `https://image.tmdb.org/t/p/original${
-                          poster_path || backdrop_path
-                        }`
-                      : NoImg
-                  }
-                  alt={title || name}
-                  width={200}
-                />
-                <h4 style={{ maxWidth: 200 }}>{title || name}</h4>
-                {String(release_date).substring(0, 4)}
-              </StyledLinkHome>
+              <StyledListItem key={id}>
+                <StyledLinkHome to={`/movies/${id}`} state={{ from: location }}>
+                  <StyledListItemImg
+                    loading="lazy"
+                    src={
+                      poster_path || backdrop_path
+                        ? `https://image.tmdb.org/t/p/original${
+                            poster_path || backdrop_path
+                          }`
+                        : NoImg
+                    }
+                    alt={title || name}
+                    width={200}
+                  />
+                  <div className="content">
+                    <h4 className="title">
+                      {title || name} ({String(release_date).substring(0, 4)})
+                      {/* <p>Creative Designer</p> */}
+                    </h4>
+                  </div>
+                </StyledLinkHome>
+              </StyledListItem>
             )
           )}
-        </ul>
+        </StyledList>
       )}
     </div>
   );

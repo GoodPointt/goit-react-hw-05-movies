@@ -1,8 +1,14 @@
 import { OPTIONS } from 'api/api';
-import { StyledLinkHome } from 'components/Styled';
+import {
+  StyledLinkHome,
+  StyledList,
+  StyledListItem,
+  StyledListItemImg,
+} from 'components/Styled';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import NoImg from '../img/no-image.png';
 
 const Home = ({ setIsLoading }) => {
   const [movies, setMovies] = useState([]);
@@ -33,17 +39,37 @@ const Home = ({ setIsLoading }) => {
   }, [setIsLoading]);
 
   return (
-    <ul>
-      {movies.map(({ title, id, name }) => (
-        <StyledLinkHome
-          key={id}
-          to={`/movies/${id}`}
-          state={{ from: location }}
-        >
-          <li>{title || name}</li>
-        </StyledLinkHome>
-      ))}
-    </ul>
+    <>
+      {movies?.length > 0 && (
+        <StyledList>
+          {movies.map(
+            ({ id, release_date, title, name, backdrop_path, poster_path }) => (
+              <StyledListItem key={id}>
+                <StyledLinkHome to={`/movies/${id}`} state={{ from: location }}>
+                  <StyledListItemImg
+                    loading="lazy"
+                    src={
+                      poster_path || backdrop_path
+                        ? `https://image.tmdb.org/t/p/original${
+                            poster_path || backdrop_path
+                          }`
+                        : NoImg
+                    }
+                    alt={title || name}
+                    width={200}
+                  />
+                  <div className="content">
+                    <h4 className="title">
+                      {title || name} ({String(release_date).substring(0, 4)})
+                    </h4>
+                  </div>
+                </StyledLinkHome>
+              </StyledListItem>
+            )
+          )}
+        </StyledList>
+      )}
+    </>
   );
 };
 
