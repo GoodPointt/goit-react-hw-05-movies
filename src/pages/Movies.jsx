@@ -103,8 +103,11 @@ const Movies = ({ setIsLoading }) => {
                   />
                   <div className="content">
                     <h4 className="title">
-                      {title || name} ({String(release_date).substring(0, 4)})
-                      {/* <p>Creative Designer</p> */}
+                      {title || name} (
+                      {release_date
+                        ? String(release_date).substring(0, 4)
+                        : 'coming soon'}
+                      )
                     </h4>
                   </div>
                 </StyledLinkHome>
